@@ -159,10 +159,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\EggCeption.cpp" />
     <ClCompile Include="src\Window.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\EggCeption.h" />
     <ClInclude Include="src\WinDefines.h" />
     <ClInclude Include="src\Window.h" />
   </ItemGroup>
