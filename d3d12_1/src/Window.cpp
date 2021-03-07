@@ -77,7 +77,7 @@ LRESULT WINAPI Window::HandleMessageSetup(HWND handle, UINT message, WPARAM wPar
 	// Basically, it'll just see if the message being handled is WM_NCCREATE
 	// Use create parameter passed in from CreateWindow() (aka "this" in the CreateWindow() )
 	// to store a Window Class ptr at WinAPI
-	if (message = WM_NCCREATE)
+	if (message == WM_NCCREATE)
 	{
 		// Extract ptr to Window Class from creation data
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
