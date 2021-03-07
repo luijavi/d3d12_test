@@ -1,0 +1,2 @@
+D:\Projects\d3d12\d3d12_1\d3d12_test\d3d12_1\x64\Debug\d3d12_1.exe
+D:\Projects\d3d12\d3d12_1\d3d12_test\d3d12_1\x64\Debug\d3d12_1.pdb
