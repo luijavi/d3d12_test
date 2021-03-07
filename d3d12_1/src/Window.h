@@ -1,6 +1,7 @@
 #pragma once
 
 #include "WinDefines.h"
+#include "EggCeption.h"
 
 /* Step 2: Create a class to represent a window. 
 * This class will encapsulate the creation and destruction of a window,
@@ -10,6 +11,21 @@
 
 class Window
 {
+// Step 5: Create a Window exception from EggCeption class
+public:
+	class Exception : public EggCeption
+	{
+	public:
+		Exception(int line, const char* file, HRESULT hResult) noexcept;
+		const char* what() const noexcept override;
+		virtual const char* GetType() const noexcept override;
+		// Takes Windows error code and output a string of that code
+		static std::string TranslateErrorCode(HRESULT hResult) noexcept;
+		HRESULT GetErrorCode() const noexcept;	// Getter for HRESULT
+		std::string GetErrorString() const noexcept;
+	private:
+		HRESULT hResult;
+	};
 private:
 	/* Step 3: Create a class to handle WNDCLASS - singleton
 	* Singleton, b/c we only need one instance of the window class.
@@ -47,3 +63,6 @@ private:
 	int height;
 	HWND handle;
 };
+
+// error exception helper macro - to get line number, and file name
+#define EGGCEPT(hResult) Window::Exception(__LINE__, __FILE__, hResult)

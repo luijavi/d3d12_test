@@ -1,4 +1,5 @@
 #include "Window.h"
+#include <sstream>
 
 // Window class stuff
 Window::WindowClass Window::WindowClass::winClass;
@@ -113,4 +114,60 @@ LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM l
 	}
 
 	return DefWindowProc(handle, message, wParam, lParam);
+}
+
+// Window Exceptions
+Window::Exception::Exception(int line, const char* file, HRESULT hResult) noexcept
+	:
+	EggCeption(line, file),
+	hResult(hResult)
+{}
+
+const char* Window::Exception::what() const noexcept
+{
+	std::ostringstream strStream;
+	strStream << GetType() << std::endl
+			  << "[Error Code] " << GetErrorCode() << std::endl
+			  << "[Description] " << GetErrorString() << std::endl
+			  << GetOriginString();
+	whatBuf = strStream.str();
+	return whatBuf.c_str();
+}
+
+const char* Window::Exception::GetType() const noexcept
+{
+	return "EggCeption: Window Exception";
+}
+
+std::string Window::Exception::TranslateErrorCode(HRESULT hResult) noexcept
+{
+	char* pMessageBuf = nullptr;
+	// Calls Window function that takes HRESULT and returns a string for
+	// that error code. The return value is the length of the error msg
+	DWORD nMessageLen = FormatMessage(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+		nullptr, hResult, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		reinterpret_cast<LPWSTR>(&pMessageBuf), 0, nullptr
+	);
+
+	if (nMessageLen == 0)
+	{
+		return "Unidentified error code";
+	}
+	// take error code that's in the windows allocated buffer and copy it
+	// into a std::string, then free that memory, and then return the std:string
+	std::string errorString = pMessageBuf;
+	LocalFree(pMessageBuf);
+	return errorString;
+}
+
+HRESULT Window::Exception::GetErrorCode() const noexcept
+{
+	return hResult;
+}
+
+std::string Window::Exception::GetErrorString() const noexcept
+{
+	return TranslateErrorCode(hResult);
 }
