@@ -121,6 +121,31 @@ LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM l
 			PostQuitMessage(0);
 			return 0;
 		} break;
+		case WM_KILLFOCUS:
+		{
+			// clear key state when window loses focus to prevent input from getting stuck
+			kbd.ClearState();
+		} break;
+		/************ KEYBOARD MESSAGES ************/
+		case WM_KEYDOWN:
+		// Syskeys need to be handled to track ALT key (VK_MENU)
+		case WM_SYSKEYDOWN:
+		{
+			if (!(lParam & 0x40000000) || kbd.AutoRepeatIsEnabled()) // 0x40000000 is the same as 2^30, to rep the 30th bit
+			{
+				kbd.OnKeyPressed(static_cast<unsigned char>(wParam));
+			}
+		} break;
+		case WM_KEYUP:
+		case WM_SYSKEYUP:
+		{
+			kbd.OnKeyReleased(static_cast<unsigned char>(wParam));
+		} break;
+		case WM_CHAR:
+		{
+			kbd.OnChar(static_cast<unsigned char>(wParam));
+		} break;
+		/********** END KEYBOARD MESSAGES **********/
 	}
 
 	return DefWindowProc(handle, message, wParam, lParam);
