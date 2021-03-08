@@ -12,8 +12,8 @@ const char* EggCeption::what() const noexcept
 	std::ostringstream strStream;
 	strStream << GetType() << std::endl
 			  << GetOriginString();
-	whatBuf = strStream.str();
-	return whatBuf.c_str();
+	whatBuffer = strStream.str();
+	return whatBuffer.c_str();
 }
 
 const char* EggCeption::GetType() const noexcept

@@ -11,7 +11,7 @@
 
 class Window
 {
-// Step 5: Create a Window exception from EggCeption class
+// Step 6: Create a Window exception class from EggCeption class
 public:
 	class Exception : public EggCeption
 	{
@@ -66,3 +66,4 @@ private:
 
 // error exception helper macro - to get line number, and file name
 #define EGGCEPT(hResult) Window::Exception(__LINE__, __FILE__, hResult)
+#define EGGCEPT_LAST_EXCEPT() Window::Exception(__LINE__, __FILE__, GetLastError())

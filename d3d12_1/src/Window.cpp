@@ -1,5 +1,6 @@
 #include "Window.h"
 #include <sstream>
+#include "resource.h"
 
 // Window class stuff
 Window::WindowClass Window::WindowClass::winClass;
@@ -27,12 +28,12 @@ Window::WindowClass::WindowClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = GetInstance();
-	wc.hIcon = nullptr;
+	wc.hIcon = static_cast<HICON>(LoadImage(instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 32, 32, 0));
 	wc.hCursor = nullptr;
 	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = GetName();
-	wc.hIconSm = nullptr;
+	wc.hIconSm = static_cast<HICON>(LoadImage(instance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));
 	RegisterClassEx(&wc);	// Register window class
 }
 
@@ -52,7 +53,10 @@ Window::Window(int width, int height, const wchar_t* name) noexcept
 	winRect.bottom = height + winRect.top;
 	// This is so that you could change the size of the client region, while taking into account
 	// the rest of the window.
-	AdjustWindowRect(&winRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE);
+	if (FAILED(AdjustWindowRect(&winRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	{
+		throw EGGCEPT_LAST_EXCEPT();	// Check if AdjustWindow fails
+	}
 	// Create window & get handle
 	handle = CreateWindow(
 		WindowClass::GetName(), name,
@@ -62,6 +66,11 @@ Window::Window(int width, int height, const wchar_t* name) noexcept
 		winRect.bottom - winRect.top,
 		nullptr, nullptr, WindowClass::GetInstance(), this
 	);
+	// check if CreateWindow succeeds
+	if (handle == nullptr)
+	{
+		throw EGGCEPT_LAST_EXCEPT();
+	}
 	// Show window
 	ShowWindow(handle, SW_SHOWDEFAULT);
 }
@@ -104,6 +113,7 @@ LRESULT WINAPI Window::HandleMessageThunk(HWND handle, UINT message, WPARAM wPar
 
 LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept
 {
+	// Main switch statement to handle messages
 	switch (message)
 	{
 		case WM_CLOSE:
@@ -130,8 +140,8 @@ const char* Window::Exception::what() const noexcept
 			  << "[Error Code] " << GetErrorCode() << std::endl
 			  << "[Description] " << GetErrorString() << std::endl
 			  << GetOriginString();
-	whatBuf = strStream.str();
-	return whatBuf.c_str();
+	whatBuffer = strStream.str();
+	return whatBuffer.c_str();
 }
 
 const char* Window::Exception::GetType() const noexcept

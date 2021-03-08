@@ -1,10 +1,10 @@
 #include "Window.h"
 
-int CALLBACK WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR commandLine, int showCommand)
+int WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPWSTR commandLine, _In_ int showCommand)
 {
 	try
 	{
-		Window window(800, 300, L"This is a test window");
+		Window window(800, 600, L"This is a test window");
 		MSG message;
 		BOOL g_result;
 		while ((g_result = GetMessage(&message, nullptr, 0, 0)) > 0)

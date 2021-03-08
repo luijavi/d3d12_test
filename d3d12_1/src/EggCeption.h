@@ -3,6 +3,7 @@
 #include <exception>
 #include <string>
 
+// Step 5: Create Exception class from std::exception to handle exceptions
 class EggCeption : public std::exception
 {
 public:
@@ -16,5 +17,5 @@ private:
 	int line;			// Line number exception was thrown from (printed from what())
 	std::string file;	// File it was thrown from (printed from what())
 protected:
-	mutable std::string whatBuf;	// mutable b/c what() is const, and whatBuf needs to be set w/i what()
+	mutable std::string whatBuffer;	// mutable b/c what() is const, and whatBuffer needs to be set w/i what()
 };
