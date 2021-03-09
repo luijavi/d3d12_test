@@ -23,10 +23,10 @@ public:
 		};
 	private:
 		Type type;
-		bool leftIsPressed;		// state variable
-		bool rightIsPressed;	// state variable
-		int x;					// x position
-		int y;					// y position
+		bool leftIsPressed;		// state at time event happened
+		bool rightIsPressed;	// state at time event happened
+		int x;					// state at time event happened
+		int y;					// state at time event happened
 	public:
 		Event() noexcept
 			:
@@ -90,10 +90,20 @@ public:
 	}
 	void Flush() const noexcept;
 private:
+	// Methods for actually handing the Windows messages for mouse component
+	void OnMouseMove(int x, int y) noexcept;
+	void OnLeftPressed(int x, int y) noexcept;
+	void OnLeftReleased(int x, int y) noexcept;
+	void OnRightPressed(int x, int y) noexcept;
+	void OnRightReleased(int x, int y) noexcept;
+	void OnWheelDown(int x, int y) noexcept;
+	void OnWheelUp(int x, int y) noexcept;
+	void TrimBuffer() noexcept;
+private:
 	static constexpr unsigned int bufferSize = 16u;
-	bool leftIsPressed;
-	bool rightIsPressed;
-	int x;
-	int y;
+	bool leftIsPressed = false;		// state variable
+	bool rightIsPressed = false;	// state variable
+	int x;							// x position state that we'll be saving
+	int y;							// y position state that we'll be saving
 	std::queue<Event> buffer;
 };
