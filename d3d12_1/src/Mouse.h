@@ -88,10 +88,10 @@ public:
 	{
 		buffer.empty();
 	}
-	void Flush() const noexcept;
+	void Flush() noexcept;
 private:
 	// Methods for actually handing the Windows messages for mouse component
-	void OnMouseMove(int x, int y) noexcept;
+	void OnMouseMove(int newX, int newY) noexcept;
 	void OnLeftPressed(int x, int y) noexcept;
 	void OnLeftReleased(int x, int y) noexcept;
 	void OnRightPressed(int x, int y) noexcept;
