@@ -103,12 +103,14 @@ private:
 	void OnRightReleased(int x, int y) noexcept;
 	void OnWheelDown(int x, int y) noexcept;
 	void OnWheelUp(int x, int y) noexcept;
+	void OnWheelDelta(int x, int y, int delta) noexcept;
 	void TrimBuffer() noexcept;
 private:
 	static constexpr unsigned int bufferSize = 16u;
 	bool leftIsPressed = false;		// state variable
 	bool rightIsPressed = false;	// state variable
 	bool isInWindow = false;
+	int wheelDeltaCarry = 0;
 	int x;							// x position state that we'll be saving
 	int y;							// y position state that we'll be saving
 	std::queue<Event> buffer;
