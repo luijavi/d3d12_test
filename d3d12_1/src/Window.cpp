@@ -136,8 +136,7 @@ LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM l
 		} break;
 		/************ KEYBOARD MESSAGES ************/
 		case WM_KEYDOWN:
-		// Syskeys need to be handled to track ALT key (VK_MENU)
-		case WM_SYSKEYDOWN:
+		case WM_SYSKEYDOWN:	// Syskeys need to be handled to track ALT key (VK_MENU)
 		{
 			if (!(lParam & 0x40000000) || kbd.AutoRepeatIsEnabled()) // 0x40000000 is the same as 2^30, to rep the 30th bit
 			{
@@ -157,7 +156,7 @@ LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM l
 		/************* MOUSE MESSAGES **************/
 		case WM_MOUSEMOVE:
 		{
-			POINTS pt = MAKEPOINTS(lParam);
+			const POINTS pt = MAKEPOINTS(lParam);
 			mouse.OnMouseMove(pt.x, pt.y);
 		} break;
 		case WM_LBUTTONDOWN:
