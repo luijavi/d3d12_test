@@ -53,7 +53,7 @@ Window::Window(int width, int height, const wchar_t* name) noexcept
 	winRect.bottom = height + winRect.top;
 	// This is so that you could change the size of the client region, while taking into account
 	// the rest of the window.
-	if (FAILED(AdjustWindowRect(&winRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE)))
+	if (AdjustWindowRect(&winRect, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, FALSE) == 0)
 	{
 		throw EGGCEPT_LAST_EXCEPT();	// Check if AdjustWindow fails
 	}
@@ -78,6 +78,14 @@ Window::Window(int width, int height, const wchar_t* name) noexcept
 Window::~Window()
 {
 	DestroyWindow(handle);
+}
+
+void Window::SetTitle(const std::string& title)
+{
+	if (SetWindowTextA(handle, title.c_str()) == 0)
+	{
+		throw EGGCEPT_LAST_EXCEPT();
+	}
 }
 
 // This function is mainly to install/set up a pointer to our instance in the Win32 side

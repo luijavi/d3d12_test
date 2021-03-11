@@ -4,6 +4,7 @@
 #include "EggCeption.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include <sstream>
 
 /* Step 2: Create a class to represent a window. 
 * This class will encapsulate the creation and destruction of a window,
@@ -55,6 +56,7 @@ public:
 	~Window();
 	Window(const Window&) = delete;
 	Window& operator=(const Window&) = delete;
+	void SetTitle(const std::string& title);
 private:
 	// Static functions b/c WINAPI doesn't know about C++ features, like member functions. But static does the trick.
 	static LRESULT CALLBACK HandleMessageSetup(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept;

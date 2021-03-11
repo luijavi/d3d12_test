@@ -86,7 +86,7 @@ public:
 	Mouse::Event Read() noexcept;
 	bool IsEmpty() const noexcept
 	{
-		buffer.empty();
+		return buffer.empty();
 	}
 	void Flush() noexcept;
 private:

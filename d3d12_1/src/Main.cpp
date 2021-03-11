@@ -11,6 +11,18 @@ int WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _I
 		{
 			TranslateMessage(&message);
 			DispatchMessage(&message);
+
+			// TODO: Delete this test
+			while (!window.mouse.IsEmpty())
+			{
+				const auto e = window.mouse.Read();
+				if (e.GetType() == Mouse::Event::Type::Move)
+				{
+					std::ostringstream oss;
+					oss << "Mouse position (" << e.GetXPos() << "," << e.GetYPos() << ")";
+					window.SetTitle(oss.str());
+				}
+			}
 		}
 
 		if (g_result == -1)
