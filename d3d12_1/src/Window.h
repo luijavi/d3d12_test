@@ -3,6 +3,7 @@
 #include "WinDefines.h"
 #include "EggCeption.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 /* Step 2: Create a class to represent a window. 
 * This class will encapsulate the creation and destruction of a window,
@@ -57,11 +58,13 @@ public:
 private:
 	// Static functions b/c WINAPI doesn't know about C++ features, like member functions. But static does the trick.
 	static LRESULT CALLBACK HandleMessageSetup(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept;
-	static LRESULT CALLBACK HandleMessageThunk(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept; // Rename?
+	static LRESULT CALLBACK HandleMessageThunk(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept; // TODO: Rename?
 	LRESULT HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM lParam) noexcept;	
 public:
 	// Step 9: Include the Keyboard header and instantiate a keyboard object
 	Keyboard kbd;
+	// Step 10: Include Mouse header and instantiate mouse object
+	Mouse mouse;
 private:
 	int width;
 	int height;
