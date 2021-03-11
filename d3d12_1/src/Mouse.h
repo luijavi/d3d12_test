@@ -19,6 +19,8 @@ public:
 			WheelUp,
 			WheelDown,
 			Move,
+			Enter,
+			Leave,
 			Invalid
 		};
 	private:
@@ -81,6 +83,7 @@ public:
 	std::pair<int, int> GetPos() const noexcept;
 	int GetXPos() const noexcept;
 	int GetYPos() const noexcept;
+	bool IsInWindow() const noexcept;
 	bool LeftIsPressed() const noexcept;
 	bool RightIsPressed() const noexcept;
 	Mouse::Event Read() noexcept;
@@ -92,6 +95,8 @@ public:
 private:
 	// Methods for actually handing the Windows messages for mouse component
 	void OnMouseMove(int newX, int newY) noexcept;
+	void OnMouseLeave() noexcept;
+	void OnMouseEnter() noexcept;
 	void OnLeftPressed(int x, int y) noexcept;
 	void OnLeftReleased(int x, int y) noexcept;
 	void OnRightPressed(int x, int y) noexcept;
@@ -103,6 +108,7 @@ private:
 	static constexpr unsigned int bufferSize = 16u;
 	bool leftIsPressed = false;		// state variable
 	bool rightIsPressed = false;	// state variable
+	bool isInWindow = false;
 	int x;							// x position state that we'll be saving
 	int y;							// y position state that we'll be saving
 	std::queue<Event> buffer;

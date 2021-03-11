@@ -44,6 +44,9 @@ Window::WindowClass::~WindowClass()
 
 // Window creation and handling stuff
 Window::Window(int width, int height, const wchar_t* name) noexcept
+	:
+	width(width),
+	height(height)
 {
 	// Calculate window size based on desired client region size.
 	RECT winRect;
@@ -157,7 +160,31 @@ LRESULT Window::HandleMessage(HWND handle, UINT message, WPARAM wParam, LPARAM l
 		case WM_MOUSEMOVE:
 		{
 			const POINTS pt = MAKEPOINTS(lParam);
-			mouse.OnMouseMove(pt.x, pt.y);
+			// if mouse moved in client region -> log move, and log enter + capture mouse (if not previously)
+			if (pt.x >= 0 && pt.x < width && pt.y >= 0 && pt.y < height)
+			{
+				mouse.OnMouseMove(pt.x, pt.y);
+				if (!mouse.IsInWindow())
+				{
+					SetCapture(handle);		// windows API function that captures mouse
+					mouse.OnMouseEnter();
+				}
+				// not in client -> log move / maintain capture if button down
+				else
+				{
+					if (wParam & (MK_LBUTTON | MK_RBUTTON))
+					{
+						mouse.OnMouseMove(pt.x, pt.y);	// generate a mouse move, even if outside of client region
+					}
+					// button up -> release capture / log event for leaving
+					else
+					{
+						ReleaseCapture();
+						mouse.OnMouseLeave();
+					}
+
+				}
+			}
 		} break;
 		case WM_LBUTTONDOWN:
 		{
